@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+	<head>
+		<title>JQuery Challenge</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+	
+		<!--
+		<link rel="stylesheet" type"text/css" href="css/jquery_challenge.css" />
+		-->
+		<style>
+			body{
+				font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;		
+			}
+			
+			#wrapper{
+				width:500px;
+				margin:0 auto;
+			}
+			
+			#errorArea{
+				width:500px;
+				padding:5px;
+				border-radius:1em;
+				font-size:1.1em;
+				margin:5px;
+				
+			}
+			
+			.mandatory {
+				color:#ff3300;
+			}
+			
+			label{
+				width:150px;
+				color:#6699ff;
+				float:left;
+				padding:7px;
+			}
+			
+			input{
+				width:300px;
+				height:30px;
+				padding:5px;
+				border-radius:1em;
+				border: 1px solid gray;
+				font-size:1.1em;
+				margin:5px;
+			}
+			
+			#submitButton{
+				width:315px;
+				height:40px;
+				padding:5px;
+				margin:25px 5px 5px 165px;
+			}
+		</style>
+		
+		
+		<script type="text/javascript" src="js/jquery-2.2.1.min.js"></script>
+		
+	</head>		
+	<body> 
+		
+		
+		<div id="wrapper"> 
+			<h1>User Details</h1>
+			
+			<div id="errorArea"></div>
+		
+			<form id="entryForm">
+			
+				<label for"email">Email<span class="mandatory">*</span>: </label>
+				<input id="email" placeholder="email address" name="email" /> 
+				
+				<label for"phone">Telephone: </label>
+				<input id="phone" name="phone" placeholder="###-###-####"></input>
+				
+				<label for"pwd">Password<span class="mandatory">*</span>: </label>
+				<input id="pwd" name="pwd" type="password"></input>
+				
+				<label for"pwdcnf">Confirm Password<span class="mandatory">*</span>: </label>
+				<input id="pwdcnf" name="pwdcnf" type="password"></input>
+				
+				<input id="submitButton" type="submit" value="Submit"/>
+			
+			</form>
+		</div>
+		
+		<script >
+			
+			$("#entryForm").submit(function(event){
+				event.preventDefault();
+				var errorsFound = false;
+				var errorMessage = "";
+				
+				if (!isValidEmailAddress($("#email").val())){
+					setErrorBackground("#email");
+					errorMessage=errorMessage+"<br> &nbsp;&nbsp; Please enter a valid email address."
+					errorsFound = true;
+				} else {
+					clearBackground("#email");
+				};
+				
+				if (!isValidPhone($("#phone").val())){
+					setErrorBackground("#phone");
+					errorMessage=errorMessage+"<br> &nbsp;&nbsp; Please enter a valid phone number."
+					errorsFound = true;
+				} else {
+					clearBackground("#phone");
+				};
+				
+				if ($("#pwd").val() == ""){
+					setErrorBackground("#pwd");
+					errorMessage=errorMessage+"<br> &nbsp;&nbsp; Password is a mandatory field."
+					errorsFound = true;
+				} else {
+					clearBackground("#pwd");
+				};
+				
+				if ($("#pwd").val()!= $("#pwdcnf").val()){
+					setErrorBackground("#pwdcnf")
+					errorMessage=errorMessage+"<br> &nbsp;&nbsp; Passwords do not match."
+					errorsFound = true;
+				} else {
+					clearBackground("#pwdcnf");
+				};
+				
+				
+				if (errorsFound){
+					setErrorBackground("#errorArea");
+					$("#errorArea").css("border", "1px solid gray");
+					$("#errorArea").html("Please verify the marked fields:"+errorMessage);
+				} else{
+					$("#errorArea").html(errorMessage);
+					$("#errorArea").css("border", "none");
+					clearBackground("#errorArea");
+					alert("Form submitted");
+				}
+			});
+			
+			function setErrorBackground(fieldID){
+				$(fieldID).css("background-color", "#ffcccc");
+			}
+			
+			function clearBackground(fieldID){
+				$(fieldID).css("background-color", "#ffffff");
+			};
+			
+			function isValidPhone(phoneNumber){
+				var phonePattern = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+				
+				return phonePattern.test(phoneNumber); 
+			};
+			
+			function isValidEmailAddress(emailAddress) {
+				var emailPattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+				return emailPattern.test(emailAddress);
+			};
+		</script>
+		
+	</body>
+</html>
